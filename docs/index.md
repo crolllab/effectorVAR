@@ -156,6 +156,11 @@ Please cite the underlying tools if you use them through this pipeline.
 
 ## Release notes
 
+### v1.0.1 *(November 2026)*
+
+- Locus coverage (`--locus_coverage`) filtered on base quality instead of mapping quality; depths now use every alignment in the BAM, filtered once at MAPQ ≥ 10.
+- Absence call (`--locus_coverage`): samples without the query in their assembly are `absent` when the read depth over the reference hit is below 0.1× their genome depth (`--locus_absent_max_depth_ratio`), otherwise `unresolved`.
+
 ### v1.0.0 *(October 2026)*
 
 - First stable release, archived on Zenodo; documentation moved to this site.
@@ -190,7 +195,7 @@ Questions, bug reports and feature requests are welcome on the [GitHub Issues](h
 
 If you use genomedenovo_nf in your research, please cite:
 
-> Croll, D. (2026). _genomedenovo_nf_ - a Nextflow pipeline for de novo genome assembly and BLAST-based querying (v1.0.0). Zenodo. [https://doi.org/10.5281/zenodo.23764357](https://doi.org/10.5281/zenodo.23764357)
+> Croll, D. (2026). _genomedenovo_nf_ - a Nextflow pipeline for de novo genome assembly and BLAST-based querying (v1.0.1). Zenodo. [https://doi.org/10.5281/zenodo.23764357](https://doi.org/10.5281/zenodo.23764357)
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23764357.svg)](https://doi.org/10.5281/zenodo.23764357)
 

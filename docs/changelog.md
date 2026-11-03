@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.0.1 — 2026-11-03
+
+### Added
+
+- **Absence call (`--locus_coverage`).** The locus coverage table has a new column, `absence_call`. A sample whose assembly has no copy of the query (no BLAST hit, or with `--query_paralog` only paralog hits) is `absent` when the read depth over the reference hit is below `--locus_absent_max_depth_ratio` (default 0.1) of its genome depth, and `unresolved` otherwise; samples with a copy are `present`. The call uses depth only. On a panel of about 4,000 genomes, most samples without the query that a zero-breadth rule left unresolved had 1–4 read pairs over the gene (below 0.1× genome depth). These reads were often PCR duplicates matching other samples' alleles exactly, i.e. contamination; at 0.1 these samples are `absent`, and only the sample with an unassembled allele (0.74×) stays `unresolved`.
+
+### Fixed
+
+- **Locus coverage filtered on base quality, not mapping quality (`--locus_coverage`).** The depth steps ran `samtools depth -q 20`, a minimum *base* quality, while the code and documentation described a MAPQ ≥ 20 filter. Locus and genome depths now count every alignment in the BAM, so a single mapping-quality threshold applies throughout: MAPQ ≥ 10, set when the BAM is written. Depths are about 9 % higher than before on the example data, at the locus and genome-wide alike, so `hit_to_genome_depth_ratio` hardly changes. On about 4,000 genomes mapped to a reference, MAPQ 20 instead of 10 left the depth over three query genes unchanged (99.4–99.9 % of their reads have MAPQ 60) and lowered genome-wide depth by about 2 %.
+
 ## v1.0.0 — 2026-10-29
 
 First stable release, archived on Zenodo. Documentation moved from the README to [crolllab.github.io/genomedenovo_nf](https://crolllab.github.io/genomedenovo_nf/).
