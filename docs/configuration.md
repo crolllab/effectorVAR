@@ -187,6 +187,7 @@ The per-query trees (BLAST hits, Exonerate CDS/protein, isoforms) do not need `-
 | `--locus_coverage` | flag | off | Compare read depth at the query locus of the reference with the genome-wide depth. Needs `--reference_genome`, `--blast_query` and read input. |
 | `--locus_conflict_min_depth_ratio` | `float` | `0.3` | A sample whose assembly lacks the query (no hit, or only paralog hits) is flagged when the read depth over the reference hit reaches this fraction of its genome depth… |
 | `--locus_conflict_min_breadth` | `float` | `80` | …and at least this percentage of the hit's bases is covered by reads. See `coverage_conflict` in the [locus coverage table](output.md#11_locus_coverage). |
+| `--locus_absent_max_depth_ratio` | `float` | `0.1` | A sample whose assembly lacks the query is called `absent` when the read depth over the reference hit stays below this fraction of its genome depth, and `unresolved` otherwise. See `absence_call` in the [locus coverage table](output.md#11_locus_coverage). |
 
 ---
 

@@ -77,9 +77,9 @@ With `--locus_coverage`, the query's locus on the reference is dropped if a para
 
 ## Reference mapping and locus coverage
 
-Trimmed reads are mapped with BWA-mem2, filtered at MAPQ ≥ 10, sorted and indexed. For `--locus_coverage`, the query is BLASTed against the reference to find its locus. Per sample, the mean and median depth over the locus ± `--padding` (MAPQ ≥ 20) are compared with the mean and SD of per-base depth over the whole genome.
+Trimmed reads are mapped with BWA-mem2, filtered at MAPQ ≥ 10, sorted and indexed; all depths below use these alignments. For `--locus_coverage`, the query is BLASTed against the reference to find its locus. Per sample, the mean and median depth over the locus ± `--padding` are compared with the mean and SD of per-base depth over the whole genome.
 
-Depth and breadth over the hit itself are checked against the sample's assembly: a sample without the query in its assembly (no BLAST hit, or only paralog hits with `--query_paralog`) but with reads covering the locus is flagged in `coverage_conflict`. The `paralog_only` / `no_hit` call then reflects the assembly, not the genome.
+Depth and breadth over the hit itself are checked against the sample's assembly: a sample without the query in its assembly (no BLAST hit, or only paralog hits with `--query_paralog`) but with reads covering the locus is flagged in `coverage_conflict`. The `paralog_only` / `no_hit` call then reflects the assembly, not the genome. Such a sample is called `absent` when the hit depth stays below `--locus_absent_max_depth_ratio` (0.1) of the genome depth and `unresolved` otherwise, on depth alone: a single read pair covers most of a short gene, so breadth would let a few stray reads, e.g. from cross-sample contamination, decide the call.
 
 ---
 

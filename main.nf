@@ -25,6 +25,7 @@ params.busco_subsample  = 100   // Number of BUSCO genes to randomly subsample f
 params.locus_coverage   = false // Optional: compute read depth at query BLAST locus on reference (requires --blast_query and --reference_genome)
 params.locus_conflict_min_depth_ratio = 0.3 // Locus coverage: flag samples without the query in the assembly whose hit depth reaches this fraction of the genome depth
 params.locus_conflict_min_breadth     = 80  // ... and whose hit breadth (% of bases with >= 1 read) reaches this value
+params.locus_absent_max_depth_ratio   = 0.1 // Locus coverage: call the query absent in samples without it in the assembly whose hit depth stays below this fraction of the genome depth
 params.slurm_queue      = ""    // Required when using -profile slurm: SLURM partition name (e.g. 'long', 'normal')
 
 

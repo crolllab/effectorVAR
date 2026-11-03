@@ -188,6 +188,7 @@ Only generated with `--locus_coverage`. One folder per query.
 | `hit_to_genome_depth_ratio` | `hit_mean_depth` / `genome_mean_depth`. |
 | `assembly_hit` | The sample's query hit in its assembly: `hit`, `no_hit`, `paralog_only`. |
 | `coverage_conflict` | `no_hit_locus_covered` / `paralog_only_locus_covered` when the assembly has no copy of the query but the reads cover its reference locus (thresholds `--locus_conflict_min_depth_ratio`, `--locus_conflict_min_breadth`), e.g. an allele that failed to assemble; otherwise `none`. |
+| `absence_call` | `present` when the assembly has a copy of the query. Without one, `absent` when `hit_to_genome_depth_ratio` is below `--locus_absent_max_depth_ratio` (the reads agree that the gene is missing), otherwise `unresolved`. Breadth is not used, because a single read pair covers most of a short gene. |
 
 !!! warning "Coverage conflicts"
     Samples with a `coverage_conflict` are also listed as warnings in the run log. Their
