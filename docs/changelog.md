@@ -12,7 +12,7 @@
 
 ## v1.0.0 — 2026-10-29
 
-First stable release, archived on Zenodo. Documentation moved from the README to [crolllab.github.io/genomedenovo_nf](https://crolllab.github.io/genomedenovo_nf/).
+First stable release, archived on Zenodo. Documentation moved from the README to [crolllab.github.io/effectorVAR](https://crolllab.github.io/effectorVAR/).
 
 ### Added
 

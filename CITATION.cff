@@ -4,7 +4,7 @@ authors:
 - family-names: Croll
   given-names: Daniel
   orcid: https://orcid.org/0000-0002-2072-380X
-title: "genomedenovo_nf - a Nextflow pipeline for de novo genome assembly and BLAST-based querying"
+title: "effectorVAR - a Nextflow pipeline to track effector gene variation across genome panels"
 version: v1.0.1
 date-released: 2026-11-03
 license: MIT

@@ -1,13 +1,13 @@
-![genomedenovo_nf logo](assets/logo.png){ .gd-logo }
+![effectorVAR logo](assets/logo.png){ .gd-logo }
 
-**genomedenovo_nf** is a [Nextflow](https://www.nextflow.io/) pipeline that assembles Illumina genomes de novo (or takes existing assemblies), checks assembly quality, and searches every genome for one or more query genes. For each query it extracts the hits, aligns them and builds trees and, optionally, recovers the exact coding sequences, classifies them as intact or truncated, and groups them into isoforms. It accepts paired-end reads from local files, NCBI/ENA SRA accessions, or pre-assembled scaffolds, in any combination.
+**effectorVAR** is a [Nextflow](https://www.nextflow.io/) pipeline that assembles Illumina genomes de novo (or takes existing assemblies), checks assembly quality, and searches every genome for one or more query genes. For each query it extracts the hits, aligns them and builds trees and, optionally, recovers the exact coding sequences, classifies them as intact or truncated, and groups them into isoforms. It accepts paired-end reads from local files, NCBI/ENA SRA accessions, or pre-assembled scaffolds, in any combination.
 
-Optional modules add a BUSCO species tree, a paralog check of the hits, read coverage at the query locus of a reference genome, and the transposable elements next to each hit. Please report any issues or share feature requests on the [GitHub Issues](https://github.com/crolllab/genomedenovo_nf/issues) page.
+Optional modules add a BUSCO species tree, a paralog check of the hits, read coverage at the query locus of a reference genome, and the transposable elements next to each hit. Please report any issues or share feature requests on the [GitHub Issues](https://github.com/crolllab/effectorVAR/issues) page.
 
 The pipeline is designed to run both on HPC clusters via SLURM or on single machines, and uses [Singularity](https://sylabs.io/singularity/) containers so all software dependencies are reproducible and portable. Every sample is assembled and searched independently, so large panels of genomes are processed in parallel.
 
 [Get started :octicons-rocket-16:](getting-started.md){ .md-button .md-button--primary }
-[View on GitHub :octicons-mark-github-16:](https://github.com/crolllab/genomedenovo_nf){ .md-button }
+[View on GitHub :octicons-mark-github-16:](https://github.com/crolllab/effectorVAR){ .md-button }
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23764357.svg)](https://doi.org/10.5281/zenodo.23764357)
 
 ---
@@ -129,7 +129,7 @@ Every assembly is checked with QUAST and, with `--busco_lineage`, BUSCO, whose s
 
 ---
 
-## Software used by genomedenovo_nf
+## Software used by effectorVAR
 
 Please cite the underlying tools if you use them through this pipeline.
 
@@ -184,19 +184,19 @@ Please cite the underlying tools if you use them through this pipeline.
 
 ## Questions and feature requests
 
-Questions, bug reports and feature requests are welcome on the [GitHub Issues](https://github.com/crolllab/genomedenovo_nf/issues) page.
+Questions, bug reports and feature requests are welcome on the [GitHub Issues](https://github.com/crolllab/effectorVAR/issues) page.
 
 !!! question "Questions? Found a bug? Feature requests?"
-    Go to the [GitHub Issues](https://github.com/crolllab/genomedenovo_nf/issues) page
+    Go to the [GitHub Issues](https://github.com/crolllab/effectorVAR/issues) page
 
 ---
 
 ## How to cite
 
-If you use genomedenovo_nf in your research, please cite:
+If you use effectorVAR in your research, please cite:
 
-> Croll, D. (2026). _genomedenovo_nf_ - a Nextflow pipeline for de novo genome assembly and BLAST-based querying (v1.0.1). Zenodo. [https://doi.org/10.5281/zenodo.23764357](https://doi.org/10.5281/zenodo.23764357)
+> Croll, D. (2026). _effectorVAR_ - a Nextflow pipeline to track effector gene variation across genome panels (v1.0.1). Zenodo. [https://doi.org/10.5281/zenodo.23764357](https://doi.org/10.5281/zenodo.23764357)
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23764357.svg)](https://doi.org/10.5281/zenodo.23764357)
 
-Please also cite the underlying tools listed in the [Software table](#software-used-by-genomedenovo_nf) above.
+Please also cite the underlying tools listed in the [Software table](#software-used-by-effectorvar) above.

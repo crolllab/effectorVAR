@@ -1,4 +1,4 @@
-# genomedenovo_nf — Example dataset
+# effectorVAR — Example dataset
 
 ## Source
 

@@ -35,7 +35,7 @@ workflow {
    log.info """
 
    ==========================================
-   ||    GENOME DENOVO & QUERY WORKFLOW.   ||
+   ||             effectorVAR              ||
    ==========================================
 
     Steps:

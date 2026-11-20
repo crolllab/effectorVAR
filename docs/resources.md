@@ -7,7 +7,7 @@
 Each task runs in a node-local scratch folder (`process.scratch = true`), and only its outputs are copied back to the work directory. SPAdes intermediates are removed after assembly and BUSCO keeps only its summaries and single-copy sequences unless `--keep_full_busco` is set. Large panels can still require substantial scratch space. Always point `-work-dir` to a fast, high-capacity scratch filesystem:
 
 ```bash
-nextflow run main.nf ... -work-dir '/path/to/scratch/genomedenovo_work'
+nextflow run main.nf ... -work-dir '/path/to/scratch/effectorVAR_work'
 ```
 
 The work directory is **not** deleted at the end of a run (`cleanup = false`), so `-resume` remains available, for example to add a query or switch on `--search_tool exonerate` without re-assembling. Delete it yourself once you have checked the outputs.

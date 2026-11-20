@@ -12,15 +12,15 @@
 ## Step 1: Download the latest release
 
 ```bash
-curl -sL https://github.com/crolllab/genomedenovo_nf/archive/refs/tags/latest.tar.gz | tar xz
-mv genomedenovo_nf-latest genomedenovo_nf
-cd genomedenovo_nf
+curl -sL https://github.com/crolllab/effectorVAR/archive/refs/tags/latest.tar.gz | tar xz
+mv effectorVAR-latest effectorVAR
+cd effectorVAR
 ```
 
 The `latest` tag is automatically updated with every new release.
 
 !!! tip "Alternative"
-    You can also browse all releases at [github.com/crolllab/genomedenovo_nf/releases](https://github.com/crolllab/genomedenovo_nf/releases) and download a specific version, or clone the repository with `git clone https://github.com/crolllab/genomedenovo_nf.git`.
+    You can also browse all releases at [github.com/crolllab/effectorVAR/releases](https://github.com/crolllab/effectorVAR/releases) and download a specific version, or clone the repository with `git clone https://github.com/crolllab/effectorVAR.git`.
 
 ---
 
@@ -35,14 +35,14 @@ The `latest` tag is automatically updated with every new release.
     !!! note "Croll lab"
         On LEGcompute you can skip Steps 1–2 entirely by loading the module:
         ```bash
-        module load genomedenovo_nf
+        module load effectorVAR
         ```
 
 === "micromamba / conda"
 
     ```bash
-    micromamba create -n nf_gd_env
-    micromamba activate nf_gd_env
+    micromamba create -n effectorVAR_env
+    micromamba activate effectorVAR_env
     micromamba install -c conda-forge -c bioconda nextflow
     ```
 
@@ -103,7 +103,7 @@ nextflow run main.nf -profile local \
     --outdir example/output
 ```
 
-Output is written to `example/output/`. The example [README](https://github.com/crolllab/genomedenovo_nf/blob/main/example/README.md) has one command per option and the sources of all files.
+Output is written to `example/output/`. The example [README](https://github.com/crolllab/effectorVAR/blob/main/example/README.md) has one command per option and the sources of all files.
 
 ---
 
@@ -192,7 +192,7 @@ Start the pipeline inside a `tmux` or `screen` session — the Nextflow process 
 export NCBI_API_KEY=your_ncbi_api_key_here
 
 nextflow run main.nf -config nextflow.config -profile slurm --slurm_queue long \
-  -work-dir /scratch/$USER/genomedenovo_work --outdir my_run \
+  -work-dir /scratch/$USER/effectorVAR_work --outdir my_run \
   --NCBI_API_key $NCBI_API_KEY \
   --reads '/path/to/reads/*_{1,2}.fq.gz' \
   --SRA_index './SRA_accessions.txt' \

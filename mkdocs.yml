@@ -1,9 +1,9 @@
-site_name: genomedenovo_nf
-site_url: https://crolllab.github.io/genomedenovo_nf/
-site_description: Nextflow pipeline for de novo genome assembly, assembly QC and query gene search across genome panels
+site_name: effectorVAR
+site_url: https://crolllab.github.io/effectorVAR/
+site_description: Nextflow pipeline to track effector gene variation across genome panels
 site_author: Daniel Croll
-repo_url: https://github.com/crolllab/genomedenovo_nf
-repo_name: crolllab/genomedenovo_nf
+repo_url: https://github.com/crolllab/effectorVAR
+repo_name: crolllab/effectorVAR
 edit_uri: edit/main/docs/
 
 theme:
@@ -80,6 +80,6 @@ extra_css:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/crolllab/genomedenovo_nf
+      link: https://github.com/crolllab/effectorVAR
   version:
     provider: mike
