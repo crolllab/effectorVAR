@@ -133,6 +133,11 @@ workflow denovo_query {
         exit 1, "ERROR: Unsupported --search_tool '${params.search_tool}'. Allowed values: blast, exonerate."
     }
 
+    // Any other value would silently switch the Exonerate refinement off
+    if (!(params.exonerate_refine in ['region', 'full', 'none'])) {
+        exit 1, "ERROR: --exonerate_refine must be 'region' (default), 'full' or 'none'. Got: '${params.exonerate_refine}'."
+    }
+
     if (params.locus_coverage && !params.reference_genome) {
         exit 1, "ERROR: --locus_coverage requires --reference_genome (for BWA mapping and BLAST-based locus search)."
     }
@@ -143,6 +148,10 @@ workflow denovo_query {
 
     if (params.locus_coverage && !params.reads && !params.SRA_index) {
         exit 1, "ERROR: --locus_coverage requires read input (--reads or --SRA_index) to produce BAM files for depth analysis."
+    }
+
+    if (params.reference_genome && !params.reads && !params.SRA_index) {
+        log.warn "--reference_genome is ignored: read mapping needs read input (--reads or --SRA_index)."
     }
 
     def min_align_prop = params.min_align_prop.toString()
@@ -747,7 +756,7 @@ ${lines.join('\n')}
 
         CombineBlastHits(combined_by_query)
 
-        // Merge per-query summary TSVs into a single wide-format table
+        // Merge per-query summary TSVs into one long table (one row per sample and query)
         all_summaries = CombineBlastHits.out.summary
             .map { query_id, summary_file -> summary_file }
             .collect()
@@ -818,7 +827,7 @@ ${lines.join('\n')}
 
             CombineExonerateHits(exonerate_combined_input)
 
-            // Merge per-query exonerate summary TSVs into a single wide-format table
+            // Merge per-query exonerate summary TSVs into one long table (one row per gene model)
             all_exonerate_summaries = CombineExonerateHits.out.summary
                 .map { query_id, summary_file -> summary_file }
                 .collect()

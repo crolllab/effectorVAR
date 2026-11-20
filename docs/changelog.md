@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- **`--exonerate_refine` is checked at startup.** A value other than `region`, `full` or `none` stops the run with an error. Before, any other value (e.g. a typo) silently switched the refinement off.
+- **`--reference_genome` without read input** now warns that the mapping is skipped, instead of ignoring the option silently.
+
 ## v1.0.2 — 2026-11-20
 
 ### Changed

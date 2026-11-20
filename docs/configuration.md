@@ -6,7 +6,7 @@ All parameters are passed on the command line. Nextflow options take one dash (`
 
 ## Startup validation
 
-Parameters and input files are checked before any task is submitted. A missing input file, an invalid value (`--search_tool`, `--busco_tree`, `--busco_subsample`, `--min_align_prop`) or an option given without the options it depends on stops the run with an error message that names the problem. The table below lists the dependencies.
+Parameters and input files are checked before any task is submitted. A missing input file, an invalid value (`--search_tool`, `--exonerate_refine`, `--busco_tree`, `--busco_subsample`, `--min_align_prop`) or an option given without the options it depends on stops the run with an error message that names the problem. The table below lists the dependencies.
 
 | Option | Requires |
 |--------|----------|
@@ -189,7 +189,7 @@ The per-query trees (BLAST hits, Exonerate CDS/protein, isoforms) do not need `-
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `--reference_genome` | `path` | — | Map the trimmed reads to this reference with BWA-mem2. Needs read input (`--reads` or `--SRA_index`); ignored for `--scaffolds`-only runs. |
+| `--reference_genome` | `path` | — | Map the trimmed reads to this reference with BWA-mem2. Needs read input (`--reads` or `--SRA_index`); a `--scaffolds`-only run ignores it with a warning. |
 | `--locus_coverage` | flag | off | Compare read depth at the query locus of the reference with the genome-wide depth. Needs `--reference_genome`, `--blast_query` and read input. |
 | `--locus_conflict_min_depth_ratio` | `float` | `0.3` | With `--locus_coverage`: a sample whose assembly lacks the query (no hit, or only paralog hits) is flagged when the read depth over the reference hit reaches this fraction of its genome depth… |
 | `--locus_conflict_min_breadth` | `float` | `80` | …and at least this percentage of the hit's bases is covered by reads. See `coverage_conflict` in the [locus coverage table](output.md#11_locus_coverage). |
