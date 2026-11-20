@@ -22,11 +22,21 @@ html {
 }
 
 /* ------------------------------------------------------------------ */
-/* Mermaid diagrams: fill width, prevent shrinking                     */
+/* Landing page pipeline overview figure                               */
+/* Full content width; in dark mode it sits on a white card because   */
+/* the figure is drawn for a white background.                        */
 /* ------------------------------------------------------------------ */
-.mermaid svg {
-  max-width: 100%;
+.gd-pipeline {
+  display: block;
+  width: 100%;
   height: auto;
+  margin: 0.5rem auto 1.5rem;
+  border-radius: 0.3rem;
+}
+
+[data-md-color-scheme="slate"] .gd-pipeline {
+  background: #ffffff;
+  padding: 0.6rem;
 }
 
 /* ------------------------------------------------------------------ */

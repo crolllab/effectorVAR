@@ -14,66 +14,7 @@ The pipeline is designed to run both on HPC clusters via SLURM or on single mach
 
 ## Pipeline Summary
 
-```mermaid
-%%{init: {"theme": "base", "themeVariables": {"fontSize": "16px"}}}%%
-flowchart TD
-    classDef io fill:#23758a59,stroke:#23758a,stroke-width:2px
-    classDef step fill:#23758a17,stroke:#23758a,stroke-width:1.5px
-    classDef opt fill:#d9622b2e,stroke:#d9622b,stroke-width:1.5px
-
-    A1([Local FASTQ\n--reads]):::io
-    A2([SRA / ENA\n--SRA_index]):::io
-    A3([Assemblies\n--scaffolds]):::io
-    Q([Query genes\n--blast_query]):::io
-
-    T[fastp\ntrimming & QC]:::step
-    S[SPAdes\nde novo assembly]:::step
-    QU[QUAST\nassembly QC]:::step
-    BU[BUSCO\ncompleteness\noptional]:::opt
-    BT[MAFFT + RAxML-NG / IQ-TREE\nBUSCO species tree\noptional]:::opt
-    BL[BLAST+\nquery search]:::step
-    PA[Paralog check\noptional]:::opt
-    EX[Hit extraction]:::step
-    EN[Exonerate\nCDS & protein\noptional]:::opt
-    CI[CDS integrity\n& isoforms]:::opt
-    AL[MAFFT + IQ-TREE\nper-query alignments & trees]:::step
-    RM[RepeatMasker\nTEs near hits\noptional]:::opt
-    MA[BWA-mem2\nreference mapping\noptional]:::opt
-    LC[Query locus coverage\noptional]:::opt
-
-    O1([2_assemblies/]):::io
-    O2([6_blast_hits/ 7_exonerate_hits/]):::io
-    O3([8_alignments/ 9_phylogenies/]):::io
-    O4([13_summary_data/]):::io
-
-    A1 --> T
-    A2 --> T
-    T --> S
-    S --> O1
-    S --> QU
-    A3 --> QU
-    QU --> BU
-    BU --> BT
-    S --> BL
-    A3 --> BL
-    Q --> BL
-    BL --> PA
-    PA --> EX
-    BL --> EX
-    EX --> O2
-    EX --> EN
-    EN --> CI
-    EX --> AL
-    EN --> AL
-    CI --> O4
-    AL --> O3
-    S --> RM
-    A3 --> RM
-    RM --> O4
-    T --> MA
-    MA --> LC
-    LC --> O4
-```
+[![effectorVAR pipeline overview. Genome assembly: Illumina paired-end reads or SRA accessions (optional SRA retrieval with entrez-direct and sratools) are trimmed with fastp and assembled with SPAdes, with QUAST for assembly QC. Effector search: BLAST+ searches each genome with the effector query (CDS or protein), and hits are aligned with MAFFT, with an optional BLAST+ paralog check. Effector variation (exonerate mode): exonerate extracts the CDS, IQ-TREE builds a per-effector isoform tree, and unique CDS and protein sequences are reported as isoforms. Optional modules: read mapping with bwa-mem2 and query locus coverage; genome completeness with BUSCO and a species tree with RAxML-NG or IQ-TREE; TE annotation around hits with RepeatMasker.](assets/pipeline_overview.png){ .gd-pipeline }](assets/pipeline_overview.png)
 
 The pipeline accepts three input modes, which can be combined in one run and converge at the assembly QC step:
 
