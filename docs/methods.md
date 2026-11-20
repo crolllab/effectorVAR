@@ -18,7 +18,7 @@ This page describes what each step of the pipeline does. The options that contro
 
 ## Query search
 
-**BLAST search.** Each query is searched against every assembly (`blastn -task blastn` or `tblastn`). Per sample, the scaffold with the best bit score is kept, and all hits of the query on that scaffold are merged into one span. That way, the separate hits of a multi-exon gene make up one region. The span ± `--padding` is extracted in the orientation of the query.
+**BLAST search.** Each query is searched against every assembly (`blastn -task blastn` or `tblastn`, e-value ≤ 1e-5). Per sample, the scaffold with the best bit score is kept, and all hits of the query on that scaffold are merged into one span. That way, the separate hits of a multi-exon gene make up one region. The span ± `--padding` is extracted in the orientation of the query.
 
 **Exonerate CDS.** Exonerate aligns the query to the extracted region (`protein2genome` for protein queries, `coding2genome` for CDS queries) to find the exon boundaries. The aligned exons give the CDS, which is translated to protein. Where gene models overlap, the best-scoring one is kept, and antisense models of nucleotide queries are discarded.
 

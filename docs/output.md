@@ -74,9 +74,8 @@ Read-trimming QC. Not generated for `--scaffolds`-only runs.
 
 | File | Description |
 |------|-------------|
-| `busco_summary_metrics.tsv` | Complete, single-copy, duplicated, fragmented and missing % for all samples. |
-| `short_summary.*.{sample_id}_busco.txt` | BUSCO short summary per sample. |
-| `{sample_id}_busco/` | Per-sample results: single-copy protein sequences, or the complete BUSCO folder with `--keep_full_busco`. |
+| `busco_summary_metrics.tsv` | Complete, single-copy, duplicated, fragmented and missing BUSCOs (% and counts) for all samples. |
+| `{sample_id}_busco/` | BUSCO short summary per sample (`short_summary.*.txt`); the complete BUSCO output, including the single-copy sequences, with `--keep_full_busco`. |
 
 ---
 
@@ -93,10 +92,10 @@ Read-trimming QC. Not generated for `--scaffolds`-only runs.
 
 | File | Description |
 |------|-------------|
-| **`blast_summary_merged.tsv`** | One row per sample; per query `{query}_Present`, `_Identity`, `_AlignLen`, `_Evalue`, `_BitScore`. |
+| **`blast_summary_merged.tsv`** | The hit summaries of all queries in one table, one row per sample and query (columns as in `{query_id}_all_blast_hits_summary.tsv`). |
 | `query_sequences/` | The split queries and their detected type. |
 | `{query_id}/{query_id}_all_blast_hits.fasta` | Query followed by the hit of every sample, named `>sample_id scaffold:start-end`. |
-| `{query_id}/{query_id}_all_blast_hits_summary.tsv` | Hit coordinates, identity, e-value and bit score per sample (`no_hits_found` without a hit). |
+| `{query_id}/{query_id}_all_blast_hits_summary.tsv` | One row per sample: `sample_id`, `query_id`, `subject_id` (hit scaffold; `no_hits_found` without a hit), `strand`, `percent_identity`, `alignment_length`, `query_start`, `query_end`, `subject_start`, `subject_end`, `evalue`, `bitscore`. |
 | `{query_id}/blast_results/{sample_id}_blast_results.tsv` | Raw BLAST tabular output. |
 | `{query_id}/hit_sequences/{sample_id}_top_hits.fasta` / `_top_hits_info.tsv` | Extracted (padded) hit region per sample, named by its scaffold location (`>scaffold:start-end hit=start-end`, the unpadded hit span; with `--query_paralog` also `paralogs=start-end,...`, the paralog copies on the scaffold that the padding stops short of). |
 | `{query_id}/paralog_check/{sample_id}_paralog_blast_results.tsv` | Raw BLAST output of the query's paralogs (`--query_paralog`). |
@@ -114,9 +113,9 @@ Only generated with `--search_tool exonerate`.
 
 | File | Description |
 |------|-------------|
-| `exonerate_summary_merged.tsv` | Exonerate results for all queries and samples. |
+| `exonerate_summary_merged.tsv` | The gene model summaries of all queries in one table (columns as in `{query_id}_all_exonerate_summary.tsv`). |
 | `{query_id}/{query_id}_all_exonerate_cds.fasta` / `_protein.fasta` | CDS and protein of every sample (and the query), named by sample ID (`{sample}_{n}` when a sample has several gene models). |
-| `{query_id}/{query_id}_all_exonerate_summary.tsv` | Scaffold, strand, coordinates, exon count and lengths per gene model. |
+| `{query_id}/{query_id}_all_exonerate_summary.tsv` | One row per gene model: `sample_id`, `query_id`, `subject_id` (scaffold), `strand`, `query_start`, `query_end`, `subject_start`, `subject_end`, `exon_count`, `cds_length`, `protein_length`, `exon_coordinates`. |
 | `{query_id}/hit_sequences/` | CDS, protein and summary per sample. |
 | `{query_id}/gff3_results/` | Raw Exonerate GFF per sample. |
 
@@ -174,12 +173,13 @@ Only generated with `--locus_coverage`. One folder per query.
 | File | Description |
 |------|-------------|
 | `{query_id}/{query_id}_all_locus_coverage.tsv` | All samples (columns below); per-sample tables `{sample_id}_{query_id}_locus_coverage.tsv`. Samples are named as in the other tables (after `--SRR_sample_map`). |
-| `{query_id}/{query_id}_ref_locus.tsv` | Best hit of the query on the reference. Empty with `--query_paralog` when a paralog scores higher at that hit: the reference has no copy of the query, and the coverage columns are `NA`. |
+| `{query_id}/{query_id}_ref_locus.tsv` | Best hit of the query on the reference (`query_id`, `chrom`, `hit_start`, `hit_end`). Empty with `--query_paralog` when a paralog scores higher at that hit: the reference has no copy of the query, and the coverage columns are `NA`. |
 
 ### Locus coverage columns
 
 | Column | Description |
 |--------|-------------|
+| `sample_id`, `query_id` | |
 | `scaffold`, `hit_start`, `hit_end` | Query hit on the reference. |
 | `locus_start`, `locus_end` | Hit ± `--padding`. |
 | `locus_mean_depth`, `locus_median_depth` | Read depth over the padded locus. |

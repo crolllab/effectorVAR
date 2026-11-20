@@ -28,16 +28,18 @@ Resources are set per process in `nextflow.config`, matched to what each tool us
 | fastp trimming | 8 | 2 GB, × attempt | 1 d |
 | QUAST | 1 | 1 GB | 1 d |
 | BUSCO | 8 | 8 GB, × attempt | 2 d |
-| BLAST (query, paralogs, reference locus) | 1 | 4 GB | 1 d |
+| BLAST (query, paralogs) | 1 | 4 GB | 1 d |
+| BLAST (reference locus, `--locus_coverage`) | 1 | 4 GB, × attempt | 4 h |
 | Exonerate | 1 | 4 GB | 1 d |
 | MAFFT (BLAST hits) | profile | 8 GB, doubled per attempt | 1 d |
+| MAFFT (Exonerate CDS, protein) | profile | 4 GB, × attempt | 1 d |
 | IQ-TREE (per-query trees) | 4 | 8 GB, × attempt | 1 d |
 | RAxML-NG / IQ-TREE (BUSCO tree) | profile | 8 / 16 GB, × attempt | 2 d |
 | RepeatMasker | 4 | 4 GB, × attempt | 2 d |
 | bwa-mem2 mapping | profile | 8 GB, × attempt | 2 d |
 | SAMtools sort | 4 | 4 GB, × attempt | 4 h |
 
-"profile" means the CPU count of the execution profile (`local` 4, `local_highCPU` and `slurm` 16).
+"profile" means the CPU count of the execution profile (`local` 4, `local_highCPU` and `slurm` 16; 1 without a profile).
 
 ### Singularity / Apptainer
 

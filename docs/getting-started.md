@@ -109,7 +109,7 @@ Output is written to `example/output/`. The example [README](https://github.com/
 
 ## Step 5: Prepare your inputs
 
-At least one of `--reads`, `--SRA_index` or `--scaffolds` is required; they can be combined in one run. A query FASTA (`--blast_query`) is needed for everything beyond assembly and assembly QC.
+At least one of `--reads`, `--SRA_index` or `--scaffolds` is required; they can be combined in one run. A query FASTA (`--blast_query`) is needed for the query search and everything built on it; assembly, assembly QC, the BUSCO species tree, read mapping and TE annotation run without one.
 
 ### Local FASTQ files
 
@@ -177,7 +177,7 @@ Pass it with `--SRR_sample_map sample_map.csv`. Samples not listed keep their na
 
 Optional companion files:
 
-- `--query_paralog`: known paralogs of the queries, named `<query>_paralog1`, `<query>_paralog2`, … (see [Paralog check](configuration.md#query-search)).
+- `--query_paralog`: known paralogs of the queries, named `<query>_paralog1`, `<query>_paralog2`, … (see [Paralog check](configuration.md#paralog-check)).
 - `--reference_genome`: a reference genome FASTA, to map the reads and measure coverage at the query locus.
 - `--repeat_library`: a TE consensus library (FASTA, e.g. from RepeatModeler or [Dfam](https://www.dfam.org)).
 
@@ -191,7 +191,7 @@ Start the pipeline inside a `tmux` or `screen` session — the Nextflow process 
 # Run with SLURM, mixed local fastq + SRA input, exact CDS and isoforms
 export NCBI_API_KEY=your_ncbi_api_key_here
 
-nextflow run main.nf -config nextflow.config -profile slurm --slurm_queue long \
+nextflow run main.nf -profile slurm --slurm_queue long \
   -work-dir /scratch/$USER/effectorVAR_work --outdir my_run \
   --NCBI_API_key $NCBI_API_KEY \
   --reads '/path/to/reads/*_{1,2}.fq.gz' \

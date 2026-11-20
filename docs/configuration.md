@@ -12,7 +12,7 @@ Parameters and input files are checked before any task is submitted. A missing i
 |--------|----------|
 | `--phylo_tree` | `--busco_lineage` |
 | `--locus_coverage` | `--reference_genome`, `--blast_query` and read input (`--reads` or `--SRA_index`) |
-| `--query_paralog` | `--blast_query` |
+| `--query_paralog` | `--blast_query`; every paralog named `<query>_paralogN` after a query and of the same type (nucleotide/protein) |
 | `--search_tool exonerate` | Nucleotide queries without in-frame stop codons (a mature CDS) |
 | `--busco_db_path` | The `--busco_lineage` folder inside `<busco_db_path>/lineages/` |
 | `-profile slurm` | `--slurm_queue` |
@@ -79,7 +79,7 @@ At least one of `--reads`, `--SRA_index` or `--scaffolds` is required; they can 
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `--reads` | `glob` | — | Local paired-end FASTQ files, e.g. `'/data/*_{1,2}.fq.gz'`. Single-quote the pattern; separate several locations with `;`. Reads are trimmed with fastp and assembled with SPAdes. |
+| `--reads` | `glob` | — | Local paired-end FASTQ files, e.g. `'/data/*_{1,2}.fq.gz'`. Single-quote the pattern; separate several locations with `;`. Reads are trimmed with fastp and assembled with SPAdes. Local single-end reads are not supported; single-end runs come only from `--SRA_index`. |
 
 ### SRA / ENA accessions
 
@@ -101,6 +101,7 @@ At least one of `--reads`, `--SRA_index` or `--scaffolds` is required; they can 
 | Folder with one subfolder per sample, each holding `scaffolds.fasta` (or `.fa`/`.fna`): `'/path/to/assemblies'` | Subfolder name |
 | Recursive glob: `'/data/**/scaffolds.fasta'` | Parent folder name |
 | File glob: `'/path/*.fasta'` | File name without extension (parent folder name if the file is called `scaffolds`, `assembly`, `genome` or `contigs`) |
+| Single file: `'/path/sample1.fasta'` | File name without extension |
 
 ### Sample names
 
@@ -113,7 +114,7 @@ Sample names come from the input:
 | Input | Sample name |
 |---|---|
 | `--reads` | Common prefix of the two read files, without trailing `_`, `.` or `-` (`S1_1.fq.gz` + `S1_2.fq.gz` → `S1`; note that `S1_R1`/`S1_R2` gives `S1_R`) |
-| `--SRA_index` | SRR run accession |
+| `--SRA_index` | Run accession (`SRR`, `ERR`, `DRR`) |
 | `--scaffolds` | Sample folder or file name (see [Scaffold input](#scaffold-input)) |
 
 `--SRR_sample_map` renames them:
@@ -131,24 +132,50 @@ Inside the pipeline, and in all outputs, characters outside `[A-Za-z0-9._-]` are
 
 ---
 
+## Assembly QC
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `--skip_quast` | flag | off | Skip QUAST. |
+| `--busco_lineage` | `string` | — | Run BUSCO with this OrthoDB lineage, e.g. `bacteria_odb10`, `fungi_odb10`, `ascomycota_odb10`, `dothideomycetes_odb10` ([all lineages](https://busco-data.ezlab.org/v5/data/lineages/)). Choose the most specific lineage for your organism. |
+| `--busco_db_path` | `path` | — | With `--busco_lineage`: folder with pre-downloaded lineages (`busco --download <lineage> --download_path <folder>`); BUSCO then runs offline. Without it, the lineage is downloaded once into `<outdir>/busco_db_cache/`. |
+| `--keep_full_busco` | flag | off | With `--busco_lineage`: keep the complete BUSCO output folders in `4_busco/`, including the single-copy sequences. By default only the short summaries are kept. |
+
+---
+
+## BUSCO species tree
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `--phylo_tree` | flag | off | Build a species tree from the BUSCO single-copy genes. Requires `--busco_lineage`. |
+| `--busco_tree` | `string` | `raxml-ng` | With `--phylo_tree`: `raxml-ng` or `iqtree`. |
+| `--busco_subsample` | `integer` / `all` | `100` | With `--phylo_tree`: number of BUSCO genes randomly drawn for the supermatrix, or `all`. |
+
+---
+
 ## Query search
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `--blast_query` | `path` | — | FASTA with one or more query sequences, each searched separately. Nucleotide queries (≥ 95 % `ACGTUN`) use `blastn -task blastn`, protein queries `tblastn`. |
-| `--search_tool` | `string` | `blast` | `blast`: BLAST only. `exonerate`: BLAST, then Exonerate spliced alignment for the exact CDS and protein, CDS integrity and isoforms. Nucleotide queries must then be a **mature CDS** (no introns); the run stops if a query has in-frame stop codons. |
-| `--exonerate_refine` | `string` | `region` | Exonerate alignment refinement: `region` (re-align the hit region with full dynamic programming, so exons of divergent alleles are not lost), `full` (refine on the whole extracted window) or `none`. |
 | `--padding` | `integer` | `500` | bp added on both sides of the BLAST hit when extracting it. The padded region is also the window searched by Exonerate and the locus used by `--locus_coverage`. With `--query_paralog`, the padding stops short of neighbouring paralog copies. |
 | `--min_align_prop` | `float` | `0.8` | Per-query trees leave out sequences covering less than this proportion of the core alignment (the columns of the query reference, or of at least half of the sequences). The query reference is always kept. `0` keeps all sequences. See [Alignment filter](methods.md#alignment-filter). |
 
 The per-query trees (BLAST hits, Exonerate CDS/protein, isoforms) do not need `--phylo_tree`: they are always built with `--blast_query`.
+
+### Exact CDS, CDS integrity and isoforms
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `--search_tool` | `string` | `blast` | `blast`: BLAST only. `exonerate`: BLAST, then Exonerate spliced alignment for the exact CDS and protein, CDS integrity and isoforms. Nucleotide queries must then be a **mature CDS** (no introns); the run stops if a query has in-frame stop codons. |
+| `--exonerate_refine` | `string` | `region` | With `--search_tool exonerate`, how Exonerate refines its alignment: `region` (re-align the hit region with full dynamic programming, so exons of divergent alleles are not lost), `full` (refine on the whole extracted window) or `none`. |
 
 ### Paralog check
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `--query_paralog` | `path` | — | FASTA with known paralogs of the queries, switching on the [paralog check](methods.md#paralog-check). Name each paralog after the first word of its query header plus `_paralog1`, `_paralog2`, … (`>GeneA_paralog1` for the query `>GeneA …`); paralogs must be of the same type (nucleotide/protein) as their query. Queries without paralogs are not checked (a warning lists them). |
-| `--paralog_ambiguous_ratio` | `float` | `0.95` | A query hit is called `ambiguous` when the second-best reference reaches this fraction of the query's bit score at the locus. Ambiguous hits are kept. |
+| `--paralog_ambiguous_ratio` | `float` | `0.95` | With `--query_paralog`: a query hit is called `ambiguous` when the second-best reference reaches this fraction of the query's bit score at the locus. Ambiguous hits are kept. |
 
 !!! info "Paralog hits never enter the other outputs"
     With `--query_paralog`, each sample's query hit is extracted only where it belongs to the
@@ -158,36 +185,15 @@ The per-query trees (BLAST hits, Exonerate CDS/protein, isoforms) do not need `-
 
 ---
 
-## Assembly QC
-
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `--skip_quast` | flag | off | Skip QUAST. |
-| `--busco_lineage` | `string` | — | Run BUSCO with this OrthoDB lineage, e.g. `bacteria_odb10`, `fungi_odb10`, `ascomycota_odb10`, `dothideomycetes_odb10` ([all lineages](https://busco-data.ezlab.org/v5/data/lineages/)). Choose the most specific lineage for your organism. |
-| `--busco_db_path` | `path` | — | Folder with pre-downloaded lineages (`busco --download <lineage> --download_path <folder>`); BUSCO then runs offline. Without it, the lineage is downloaded once into `<outdir>/busco_db_cache/`. |
-| `--keep_full_busco` | flag | off | Keep the complete BUSCO output folders. By default only the short summaries and the single-copy protein sequences are kept. |
-
----
-
-## BUSCO species tree
-
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `--phylo_tree` | flag | off | Build a species tree from the BUSCO single-copy genes. Requires `--busco_lineage`. |
-| `--busco_tree` | `string` | `raxml-ng` | `raxml-ng` or `iqtree`. |
-| `--busco_subsample` | `integer` / `all` | `100` | Number of BUSCO genes randomly drawn for the supermatrix, or `all`. |
-
----
-
 ## Reference mapping and locus coverage
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `--reference_genome` | `path` | — | Map the trimmed reads to this reference with BWA-mem2. Needs read input. |
+| `--reference_genome` | `path` | — | Map the trimmed reads to this reference with BWA-mem2. Needs read input (`--reads` or `--SRA_index`); ignored for `--scaffolds`-only runs. |
 | `--locus_coverage` | flag | off | Compare read depth at the query locus of the reference with the genome-wide depth. Needs `--reference_genome`, `--blast_query` and read input. |
-| `--locus_conflict_min_depth_ratio` | `float` | `0.3` | A sample whose assembly lacks the query (no hit, or only paralog hits) is flagged when the read depth over the reference hit reaches this fraction of its genome depth… |
+| `--locus_conflict_min_depth_ratio` | `float` | `0.3` | With `--locus_coverage`: a sample whose assembly lacks the query (no hit, or only paralog hits) is flagged when the read depth over the reference hit reaches this fraction of its genome depth… |
 | `--locus_conflict_min_breadth` | `float` | `80` | …and at least this percentage of the hit's bases is covered by reads. See `coverage_conflict` in the [locus coverage table](output.md#11_locus_coverage). |
-| `--locus_absent_max_depth_ratio` | `float` | `0.1` | A sample whose assembly lacks the query is called `absent` when the read depth over the reference hit stays below this fraction of its genome depth, and `unresolved` otherwise. See `absence_call` in the [locus coverage table](output.md#11_locus_coverage). |
+| `--locus_absent_max_depth_ratio` | `float` | `0.1` | With `--locus_coverage`: a sample whose assembly lacks the query is called `absent` when the read depth over the reference hit stays below this fraction of its genome depth, and `unresolved` otherwise. See `absence_call` in the [locus coverage table](output.md#11_locus_coverage). |
 
 ---
 
