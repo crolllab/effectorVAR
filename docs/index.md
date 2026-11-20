@@ -156,6 +156,10 @@ Please cite the underlying tools if you use them through this pipeline.
 
 ## Release notes
 
+### v1.0.2 *(November 2026)*
+
+- New name, effectorVAR, with the repository and this site at new addresses; parameters and outputs are unchanged.
+
 ### v1.0.1 *(November 2026)*
 
 - Locus coverage (`--locus_coverage`) filtered on base quality instead of mapping quality; depths now use every alignment in the BAM, filtered once at MAPQ ≥ 10.
@@ -195,7 +199,7 @@ Questions, bug reports and feature requests are welcome on the [GitHub Issues](h
 
 If you use effectorVAR in your research, please cite:
 
-> Croll, D. (2026). _effectorVAR_ - a Nextflow pipeline to track effector gene variation across genome panels (v1.0.1). Zenodo. [https://doi.org/10.5281/zenodo.23764357](https://doi.org/10.5281/zenodo.23764357)
+> Croll, D. (2026). _effectorVAR_ - a Nextflow pipeline to track effector gene variation across genome panels (v1.0.2). Zenodo. [https://doi.org/10.5281/zenodo.23764357](https://doi.org/10.5281/zenodo.23764357)
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23764357.svg)](https://doi.org/10.5281/zenodo.23764357)
 

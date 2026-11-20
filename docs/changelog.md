@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.2 — 2026-11-20
+
+### Changed
+
+- **New name: effectorVAR.** The repository is now [github.com/crolllab/effectorVAR](https://github.com/crolllab/effectorVAR) and the documentation [crolllab.github.io/effectorVAR](https://crolllab.github.io/effectorVAR/). Release archives unpack to `effectorVAR-<version>/`. Parameters and outputs are unchanged.
+
 ## v1.0.1 — 2026-11-03
 
 ### Added
