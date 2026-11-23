@@ -1,11 +1,18 @@
 # Changelog
 
-## Unreleased
+## v1.0.3 — 2026-11-24
 
 ### Changed
 
 - **`--exonerate_refine` is checked at startup.** A value other than `region`, `full` or `none` stops the run with an error. Before, any other value (e.g. a typo) silently switched the refinement off.
 - **`--reference_genome` without read input** now warns that the mapping is skipped, instead of ignoring the option silently.
+- **SPAdes retries.** Memory doubles on every attempt (16 to 256 GB). Out-of-memory failures are retried while `--max_memory` allows; other failures are retried once, then the sample is skipped.
+- **`--max_memory` defaults to 256 GB** (was 128 GB).
+
+### Fixed
+
+- **SPAdes stopped at half its memory.** SPAdes applies `-m` to its address space, which can reach twice the memory in use. `-m` is now twice the task memory.
+- **`--locus_coverage` could fail with exit status 141.** The BAM header no longer goes through a pipe, and a failing command is now written to `.command.err`.
 
 ## v1.0.2 — 2026-11-20
 

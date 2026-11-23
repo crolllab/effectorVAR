@@ -93,6 +93,8 @@ process ComputeLocusCoverage {
     def qid_safe = query_id.replaceAll(/[^A-Za-z0-9._-]/, '_')
     """
     set -euo pipefail
+    # Name the failing command in .command.err (a failure can otherwise leave no message)
+    trap 'echo "ERROR: line \$LINENO: \\"\$BASH_COMMAND\\" exited with status \$?" >&2' ERR
 
     OUT="${sample_id}_${qid_safe}_locus_coverage.tsv"
 
@@ -113,7 +115,10 @@ process ComputeLocusCoverage {
     fi
 
     # ── Padded locus coordinates (clamped to chromosome boundaries) ──────────
-    CHROM_LEN=\$(samtools view -H ${bam} | awk -v c="\$CHROM" '
+    # The header goes to a file first: awk stopping early on a pipe would kill
+    # samtools with SIGPIPE, and pipefail would fail the task.
+    samtools view -H ${bam} > bam_header.sam
+    CHROM_LEN=\$(awk -v c="\$CHROM" '
         /^@SQ/ {
             sn = ""; ln = 0
             for (i = 1; i <= NF; i++) {
@@ -121,7 +126,7 @@ process ComputeLocusCoverage {
                 if (\$i ~ /^LN:/) ln = substr(\$i, 4)
             }
             if (sn == c) { print ln; exit }
-        }')
+        }' bam_header.sam)
     [ -z "\$CHROM_LEN" ] && CHROM_LEN=999999999
 
     LOCUS_START=\$(( HIT_START - ${params.padding} > 1          ? HIT_START - ${params.padding} : 1           ))

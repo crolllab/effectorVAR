@@ -1,8 +1,13 @@
-// Fixed SPAdes process for specific file outputs
+// SPAdes memory limit (-m). SPAdes enforces -m on its address space, not on the
+// memory it actually uses (RSS). Its memory-mapped temporary files count towards
+// the address space, which can reach twice the RSS, so with -m equal to the task
+// memory SPAdes stops with ENOMEM at half of it. -m is therefore twice the task
+// memory; the SLURM memory limit (or the machine) then bounds the real use, and an
+// out-of-memory kill is retried with more memory. Memory, retries and the retry
+// policy are set in nextflow.config.
+
 process SPAdes {
     tag "SPAdes PE assembly"
-    errorStrategy { task.attempt <= 6 ? 'retry' : 'ignore' }
-    maxRetries 6
 
     publishDir "${params.outdir}/2_assemblies", mode: 'copy', pattern: "*/contigs.fasta"
     publishDir "${params.outdir}/2_assemblies", mode: 'copy', pattern: "*/scaffolds.fasta"
@@ -23,7 +28,7 @@ process SPAdes {
         --pe1-2 ${read2} \
         -o ${sample_id} \
         -t ${task.cpus} \
-        -m \$((${task.memory.toGiga()})) \
+        -m ${task.memory.toGiga() * 2} \
         --isolate
     
     # Clean up intermediate files to save space
@@ -47,8 +52,6 @@ process SPAdes {
 // SPAdes process for single-end reads
 process SPAdesSE {
     tag "SPAdes SE assembly"
-    errorStrategy { task.attempt <= 6 ? 'retry' : 'ignore' }
-    maxRetries 6
 
     publishDir "${params.outdir}/2_assemblies", mode: 'copy', pattern: "*/contigs.fasta"
     publishDir "${params.outdir}/2_assemblies", mode: 'copy', pattern: "*/scaffolds.fasta"
@@ -68,7 +71,7 @@ process SPAdesSE {
         --s1 ${read} \
         -o ${sample_id} \
         -t ${task.cpus} \
-        -m \$((${task.memory.toGiga()})) \
+        -m ${task.memory.toGiga() * 2} \
         --isolate
     
     # Clean up intermediate files to save space

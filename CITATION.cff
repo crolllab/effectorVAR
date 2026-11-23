@@ -5,8 +5,8 @@ authors:
   given-names: Daniel
   orcid: https://orcid.org/0000-0002-2072-380X
 title: "effectorVAR - a Nextflow pipeline to track effector gene variation across genome panels"
-version: v1.0.2
-date-released: 2026-11-20
+version: v1.0.3
+date-released: 2026-11-24
 license: MIT
 doi: 10.5281/zenodo.23764357
 identifiers:

@@ -24,7 +24,7 @@ Resources are set per process in `nextflow.config`, matched to what each tool us
 
 | Process | CPUs | Memory (first attempt) | Time |
 |---------|------|------------------------|------|
-| SPAdes | profile | 16 GB, × attempt | 7 d |
+| SPAdes | profile | 16 GB, doubled per attempt | 7 d |
 | fastp trimming | 8 | 2 GB, × attempt | 1 d |
 | QUAST | 1 | 1 GB | 1 d |
 | BUSCO | 8 | 8 GB, × attempt | 2 d |
@@ -40,6 +40,12 @@ Resources are set per process in `nextflow.config`, matched to what each tool us
 | SAMtools sort | 4 | 4 GB, × attempt | 4 h |
 
 "profile" means the CPU count of the execution profile (`local` 4, `local_highCPU` and `slurm` 16; 1 without a profile).
+
+### SPAdes retries
+
+An assembly that runs out of memory is retried with twice the memory (16, 32, 64, 128, 256 GB) for as long as `--max_memory` allows. Any other SPAdes failure is retried once. A sample that still fails is skipped: it has no assembly, and the run goes on with the other samples. The log names it with `Error is ignored`.
+
+SPAdes gets a memory limit (`-m`) of twice the task memory. SPAdes applies `-m` to its address space, which includes its memory-mapped temporary files and can reach twice the memory actually in use. The task memory (the SLURM limit, or the machine's memory) bounds the real use.
 
 ### Singularity / Apptainer
 

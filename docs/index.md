@@ -97,6 +97,12 @@ Please cite the underlying tools if you use them through this pipeline.
 
 ## Release notes
 
+### v1.0.3 *(November 2026)*
+
+- SPAdes retries: memory doubles on every attempt (up to `--max_memory`, now 256 GB by default), and SPAdes no longer stops at half its memory.
+- Locus coverage (`--locus_coverage`) no longer fails with exit status 141.
+- `--exonerate_refine` is checked at startup, and `--reference_genome` without read input warns that the mapping is skipped.
+
 ### v1.0.2 *(November 2026)*
 
 - New name, effectorVAR, with the repository and this site at new addresses; parameters and outputs are unchanged.
@@ -140,7 +146,7 @@ Questions, bug reports and feature requests are welcome on the [GitHub Issues](h
 
 If you use effectorVAR in your research, please cite:
 
-> Croll, D. (2026). _effectorVAR_ - a Nextflow pipeline to track effector gene variation across genome panels (v1.0.2). Zenodo. [https://doi.org/10.5281/zenodo.23764357](https://doi.org/10.5281/zenodo.23764357)
+> Croll, D. (2026). _effectorVAR_ - a Nextflow pipeline to track effector gene variation across genome panels (v1.0.3). Zenodo. [https://doi.org/10.5281/zenodo.23764357](https://doi.org/10.5281/zenodo.23764357)
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23764357.svg)](https://doi.org/10.5281/zenodo.23764357)
 

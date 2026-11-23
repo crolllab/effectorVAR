@@ -63,7 +63,7 @@ Give **one quoted value** and separate the patterns with a **semicolon**:
 | `--outdir` | `path` | `./nf_output` | Directory for final output files. |
 | `--slurm_queue` | `string` | — | **Required with `-profile slurm`.** Name of the SLURM partition to submit all jobs to. The partition should allow long jobs (up to 7 days for large assemblies). |
 | `--max_cpus` | `integer` | `16` | Upper bound on the CPUs of any single task. |
-| `--max_memory` | `memory` | `128.GB` | Upper bound on the memory of any single task, including memory that grows with each retry. |
+| `--max_memory` | `memory` | `256.GB` | Upper bound on the memory of any single task, including memory that grows with each retry. |
 | `--max_time` | `duration` | `7.d` | Upper bound on the walltime of any single task. |
 
 !!! tip "Set the caps to your largest node"
